@@ -26,9 +26,7 @@ public class UserDetailsImp implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-    // Agregar los roles del usuario como GrantedAuthority
     authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-    // También puedes agregar más roles si es necesario
     return authorities;
     }
 
