@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,18 +23,18 @@ import org.springframework.web.bind.annotation.PutMapping;
  * @author ASUS
  */
 @RestController
-@RequestMapping("/api/v2/")
+@CrossOrigin(origins = "*")
+@RequestMapping("/empleados")
 public class ControllerEmpleados {
     
     @Autowired
     private RepositoryEmpleado repositoryEmpleado;
-    
-    @GetMapping("empleados")
+    @GetMapping()
     public List<Empleado> list() {
         return repositoryEmpleado.findAll();
     }
     
-    @GetMapping("empleado/{id}")
+    @GetMapping("/{id}")
     public Empleado get(@PathVariable Long id) {
         Optional<Empleado> resEmpl= repositoryEmpleado.findById(id);
         if (resEmpl.isPresent()) {
@@ -52,7 +53,7 @@ public class ControllerEmpleados {
 //        return null;
     }
     
-    @PutMapping("empleado/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> put(@PathVariable String id, @RequestBody Empleado empleadoActualizado) {
         Optional<Empleado> optionalEmpleado = repositoryEmpleado.findById(Long.valueOf(id));
         if (optionalEmpleado.isPresent()) {
@@ -73,7 +74,7 @@ public class ControllerEmpleados {
         return ResponseEntity.ok().body(empleadoGuardado);
     }
     
-    @DeleteMapping("empleado/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable String id) {
          if (repositoryEmpleado.existsById(Long.valueOf(id))) {
             repositoryEmpleado.deleteById(Long.valueOf(id));

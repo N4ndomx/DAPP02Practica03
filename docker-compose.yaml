@@ -1,0 +1,45 @@
+version: '3'
+services:
+  db:
+    image: postgres:11
+    restart: always
+    networks:
+      - app_net
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ejemplo
+    container_name: db_ejemplo
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+
+  backend:
+    image: n4ndomx/dapp02practica03-back:latest
+    container_name: api-rest
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - app_net
+    depends_on:
+      - db
+
+  frontend:
+    container_name: frontend-emp
+
+    image: n4ndomx/dapp02practica04-front:latest
+    networks:
+      - app_net
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    links:
+      - backend
+
+networks:
+  app_net:
+    driver: bridge
